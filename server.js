@@ -18,8 +18,19 @@ server.get('/api/weather/:localeId', (req, res) => {
     }
 })
 
-server.all('*', (req, res) => {
-    res.status(404).send('Not found')
+// If a path was not found, throw 404
+server.use((req, res, next) => {
+  const err = new Error('Not Found')
+  err.status = 404
+  next(err)
+})
+
+server.use((err, req, res, next) => {
+  res.status(err.status || 500).send({
+      message: err.message,
+      error: err,
+      title: 'error'
+  })
 })
 
 server.listen(PORT, () => {
