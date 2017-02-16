@@ -4,6 +4,10 @@ const server = express()
 
 const PORT = process.env.PORT
 
+server.use('/', express.static('html'))
+server.use('/images', express.static('images'))
+server.use('/styles', express.static('styles'))
+
 server.get('/api/locales', (req, res) => {
     res.send(WeatherService.getLocales())
 })
